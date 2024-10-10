@@ -20,7 +20,10 @@ return new class extends Migration
             $table->float('price')->default(0);
             $table->string('image')->nullable();
             $table->string('barcode')->nullable();
-            $table->boolean('is_active')->unsigned()->default(0)->change()->nullable();
+            $table->string('SKU')->nullable();
+            $table->timestamp('published_at')->nullable();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->boolean('is_active')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

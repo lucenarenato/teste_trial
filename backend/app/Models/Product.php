@@ -2,9 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model
 {
@@ -17,6 +22,9 @@ class Product extends Model
         'image',
         'barcode',
         'is_active',
+        'SKU',
+        'published_at',
+        'user_id',
     ];
 
     protected $casts = [
@@ -50,5 +58,30 @@ class Product extends Model
         }
 
         return url('') . "/images/products/" . $this->image;
+    }
+
+    // App\Database\Factories\ProductFactory.php
+    public function definition()
+    {
+        return [
+            // ...
+            'is_active' => $this->faker->boolean(),
+            // ...
+        ];
+    }
+
+    public function stock(): HasOne
+    {
+        return $this->hasOne(Stock::class);
+    }
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class);
+    }
+
+    public function excerpt(): string
+    {
+        return Str::words(tiptap_converter()->asText($this->content), 40, '...');
     }
 }

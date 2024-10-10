@@ -1,0 +1,58 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class Stock extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'product_id',
+        'data',
+        'quantity',
+        'type_id',
+        'type',
+        'canceled',
+    ];
+
+    protected $casts = [
+        'canceled' => 'boolean',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(ProductType::class);
+    }
+
+    public function decrementStock(int $quantity): Bool
+    {
+        if ($this->quantity < $quantity) {
+            return false; //Not enough stock
+        }
+
+        $this->decrement('quantity', $quantity);
+
+        return true;
+    }
+
+    public function incrementStock(int $quantity): void
+    {
+        $this->increment('quantity', $quantity);
+        $this->save();
+    }
+}

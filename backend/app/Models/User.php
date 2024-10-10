@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Carbon\Carbon;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -24,7 +25,8 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
-        'last_login'
+        'last_login',
+        'is_active',
     ];
 
     /**
@@ -45,6 +47,7 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_active' => 'boolean',
     ];
 
     public function user_is_verified() {
@@ -91,6 +94,22 @@ class User extends Authenticatable implements JWTSubject
     public function products()
     {
         return $this->hasMany(Product::class)->orderBy('id', 'desc');
+    }
+
+    public function definition()
+    {
+        return [
+            // ...
+            'is_active' => $this->faker->boolean(),
+            // ...
+        ];
+    }
+
+    public function updateAction()
+    {
+        $user = User::where('id', '=', $this->id)->update([
+            'last_login' => Carbon::now(),
+        ]);
     }
 
 }
