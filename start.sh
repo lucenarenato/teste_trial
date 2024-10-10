@@ -26,7 +26,7 @@ sleep 0m 35s
 
 sudo chmod -R 777 storage/ bootstrap/
 ./vendor/bin/sail artisan migrate --seed
-./vendor/bin/sail artisan passport:install
+# ./vendor/bin/sail artisan passport:install
 ./vendor/bin/sail artisan key:generate
 ./vendor/bin/sail artisan config:cache
 # docker-compose -f back-end/docker-compose.yml up -d
