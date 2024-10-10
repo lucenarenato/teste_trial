@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  vuejs-app:
+    container_name: vuejs-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+    - HOST=0.0.0.0
+    volumes:
+      - ./:/app
+    working_dir: /app
+    # command: npm install
+    # command: npm run build
+    ports:
+      - "8080:8080"
