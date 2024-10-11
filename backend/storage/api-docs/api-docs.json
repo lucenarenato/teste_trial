@@ -1,0 +1,201 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API",
+        "description": "Swagger OpenApi",
+        "contact": {
+            "email": "admin@example.com"
+        },
+        "license": {
+            "name": "Teste",
+            "url": "https://laravel.test/"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/modules/": {},
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login",
+                "description": "Login",
+                "operationId": "535ffeda4b78916efd658b2844ea897a",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "admin@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Register User",
+                "description": "Register New User",
+                "operationId": "da8643013c2941f5ed7f8a9c9b4a7f7a",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Jhon Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "jhondoe@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Register New User Data"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logout",
+                "description": "Logout",
+                "operationId": "46f8a14c8083abb69eed72768aa08629",
+                "responses": {
+                    "200": {
+                        "description": "Logout"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Refresh",
+                "description": "Refresh",
+                "operationId": "f3538b6e9c46bcf601a9d194288b03d4",
+                "responses": {
+                    "200": {
+                        "description": "Refresh"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "responses": {
+            "200": {
+                "description": "Authenticated User Profile"
+            },
+            "400": {
+                "description": "Bad request"
+            },
+            "404": {
+                "description": "Resource Not Found"
+            },
+            "Unauthorized": {
+                "description": "If no token..."
+            }
+        },
+        "securitySchemes": {
+            "bearer": {
+                "type": "apiKey",
+                "description": "Bearer token, Ex: Bearer <token>",
+                "name": "Authorization",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        }
+    ],
+    "security": [
+        {
+            "bearer": {
+                "type": "apiKey",
+                "description": "Bearer token, Ex: Bearer <token>",
+                "name": "Authorization",
+                "in": "header",
+                "scheme": "bearer"
+            }
+        }
+    ]
+}
