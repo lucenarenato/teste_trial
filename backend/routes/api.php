@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Products\ProductsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,13 @@ Route::group([
         Route::post('refresh', [AuthController::class, 'refresh']);
         Route::get('me', [AuthController::class, 'me']);
     });
+
+    /**
+     * Products Module
+     */
+    Route::resource('products', ProductsController::class);
+    Route::get('products/view/all', [ProductsController::class, 'indexAll']);
+    Route::get('products/view/search', [ProductsController::class, 'search']);
 
 
 });

@@ -110,7 +110,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @OA\GET(
+     * @OA\Get(
      *     path="/api/auth/me",
      *     tags={"Authentication"},
      *     summary="Authenticated User Profile",
