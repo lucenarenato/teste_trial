@@ -75,6 +75,54 @@ services:
         networks:
             - sail
 
+    queue:
+        build:
+            context: ./docker
+            dockerfile: artisan.dockerfile
+            args:
+                WWWGROUP: "${WWWGROUP}"
+        image: sail-8.3/app
+        restart: unless-stopped
+        container_name: queue
+        volumes:
+            - ./:/var/www/html:delegated
+            - ./docker/composer/packages/:/var/www/packages
+        depends_on:
+            - mysql
+        working_dir: /var/www/html
+        entrypoint: ["php", "/var/www/html/artisan", "queue:work"]
+        networks:
+            - sail
+        user: 1000:1000
+
+    laravel-scheduler-worker:
+        build:
+            context: ./docker
+            dockerfile: artisan.dockerfile
+            args:
+                WWWGROUP: "${WWWGROUP}"
+        image: sail-8.3/app
+        restart: always
+        container_name: scheduler
+        depends_on:
+            - laravel.test
+        tty: true
+        environment:
+            APP_ENV: local
+            CONTAINER_ROLE: scheduler
+            CACHE_DRIVER: redis
+            SESSION_DRIVER: redis
+            QUEUE_DRIVER: redis
+            REDIS_HOST: redis
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html:delegated
+            - ./docker/composer/packages/:/var/www/packages
+        entrypoint: ["php", "/var/www/html/artisan", "schedule:run"]
+        networks:
+            - sail
+        user: 1000:1000
+
 networks:
     sail:
         driver: bridge

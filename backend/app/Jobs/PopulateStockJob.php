@@ -33,6 +33,7 @@ class PopulateStockJob implements ShouldQueue
      */
     public function handle()
     {
+        \Log::info('PopulateStockJob');
         for ($i = 0; $i < 10; $i++) {
             $user = User::inRandomOrder()->first();
             $product = Product::inRandomOrder()->first();

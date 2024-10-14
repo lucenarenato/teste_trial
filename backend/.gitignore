@@ -16,3 +16,12 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+rr
+.rr.yaml
+docker/logs/nginx/*.log
+/docker/logs/nginx/*.log
+docker/logs/nginx/laravel_access.log
+docker/certbot/logs
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php
