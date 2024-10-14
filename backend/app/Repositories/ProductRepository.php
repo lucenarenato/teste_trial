@@ -5,22 +5,42 @@ namespace App\Repositories;
 use Illuminate\Support\Str;
 use App\Helpers\UploadHelper;
 use App\Interfaces\CrudInterface;
+use App\Models\User;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
+use Illuminate\Contracts\Pagination\Paginator;
 
-class ProductRepository implements CrudInterface{
+class ProductRepository implements CrudInterface
+{
+
+    /**
+     * Authenticated User Instance.
+     *
+     * @var User
+     */
+    public User | null $user;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->user = Auth::guard()->user();
+    }
 
     /**
      * Get All Products
      *
      * @return collections Array of Product Collection
      */
-    public function getAll(){
+    public function getAll(): Paginator
+    {
         $user = Auth::guard()->user();
         return $user->products()
-        ->orderBy('id', 'desc')
-        ->with('user')
-        ->paginate(10);
+            ->orderBy('id', 'desc')
+            ->with('user')
+            ->paginate(10);
     }
 
     /**
@@ -29,11 +49,12 @@ class ProductRepository implements CrudInterface{
      * @param int $pageNo
      * @return collections Array of Product Collection
      */
-    public function getPaginatedData($perPage){
+    public function getPaginatedData($perPage): Paginator
+    {
         $perPage = isset($perPage) ? $perPage : 12;
         return Product::orderBy('id', 'desc')
-        ->with('user')
-        ->paginate($perPage);
+            ->with('user')
+            ->paginate($perPage);
     }
 
     /**
@@ -42,29 +63,31 @@ class ProductRepository implements CrudInterface{
      * @param int $pageNo
      * @return collections Array of Product Collection
      */
-    public function searchProduct($keyword, $perPage){
+    public function searchProduct($keyword, $perPage): Paginator
+    {
         $perPage = isset($perPage) ? $perPage : 10;
         return Product::where('title', 'like', '%'.$keyword.'%')
-        ->orWhere('description', 'like', '%'.$keyword.'%')
-        ->orWhere('price', 'like', '%'.$keyword.'%')
-        ->orderBy('id', 'desc')
-        ->with('user')
-        ->paginate($perPage);
+            ->orWhere('description', 'like', '%'.$keyword.'%')
+            ->orWhere('price', 'like', '%'.$keyword.'%')
+            ->orderBy('id', 'desc')
+            ->with('user')
+            ->paginate($perPage);
     }
-    
+
     /**
      * Create New Product
      *
      * @param array $data
      * @return object Product Object
      */
-    public function create(array $data){
+    public function create(array $data): Product
+    {
         $titleShort = Str::slug(substr($data['title'], 0, 20));
         $user = Auth::guard()->user();
-        $data['user_id'] =  $user->id;       
+        $data['user_id'] =  $user->id;
         if (!empty($data['image'])) {
-            $data['image'] = UploadHelper::upload('image', $data['image'], $titleShort.'-'. time(), 'images/products');  
-        }      
+            $data['image'] = UploadHelper::upload('image', $data['image'], $titleShort.'-'. time(), 'images/products');
+        }
         $product = Product::create($data);
         return $product;
     }
@@ -75,7 +98,8 @@ class ProductRepository implements CrudInterface{
      * @param int $id
      * @return boolean true if deleted otherwise false
      */
-    public function delete($id){
+    public function delete(int $id): bool
+    {
         $product = Product::find($id);
         if (is_null($product))
             return false;
@@ -91,7 +115,8 @@ class ProductRepository implements CrudInterface{
      * @param int $id
      * @return void
      */
-    public function getByID($id){
+    public function getByID($id): Product|null
+    {
         return Product::with('user')->find($id);
     }
 
@@ -102,11 +127,12 @@ class ProductRepository implements CrudInterface{
      * @param array $data
      * @return object Updated Product Object
      */
-    public function update($id, array $data){
+    public function update($id, array $data): Product|null
+    {
         $product = Product::find($id);
         if(!empty($data['image'])){
             $titleShort = Str::slug(substr($data['title'], 0, 20));
-            $data['image'] = UploadHelper::update('image', $data['image'], $titleShort.'-'. time(), 'images/products', $product->image);           
+            $data['image'] = UploadHelper::update('image', $data['image'], $titleShort.'-'. time(), 'images/products', $product->image);
         }else{
             $data['image'] = $product->image;
         }

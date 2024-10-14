@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Products\ProductsController;
+use App\Http\Controllers\StockController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,5 +39,11 @@ Route::group([
     Route::get('products/view/all', [ProductsController::class, 'indexAll']);
     Route::get('products/view/search', [ProductsController::class, 'search']);
 
+    /**
+     * Stocks Module
+     */
+    Route::post('/stock', [StockController::class, 'createStockEntry']);
+    Route::get('/stock', [StockController::class, 'getStockData']);
+    Route::get('/stock/statistics', [StockController::class, 'getStockStatistics']);
 
 });
