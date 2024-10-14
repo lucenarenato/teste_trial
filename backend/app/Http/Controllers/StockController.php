@@ -35,8 +35,7 @@ class StockController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"user_id", "product_id", "data", "quantity", "type_id"},
-     *             @OA\Property(property="user_id", type="integer", example=1, description="ID of the user"),
+     *             required={"product_id", "data", "quantity", "type_id"},
      *             @OA\Property(property="product_id", type="integer", example=10, description="ID of the product"),
      *             @OA\Property(property="data", type="string", format="date", example="2024-10-11", description="Date of the stock entry"),
      *             @OA\Property(property="quantity", type="integer", example=5, description="Quantity of the stock"),
@@ -52,8 +51,11 @@ class StockController extends Controller
 
     public function createStockEntry(Request $request)
     {
+        // Obtenha o usuário autenticado
+        $user = Auth::guard('api')->user();
+
+        // Validação dos campos do request, sem 'user_id'
         $validated = $request->validate([
-            'user_id' => 'required|integer|exists:users,id',
             'product_id' => 'required|integer|exists:products,id',
             'data' => 'required|date',
             'quantity' => 'required|integer|min:1',
@@ -61,11 +63,12 @@ class StockController extends Controller
             'canceled' => 'boolean',
         ]);
 
-        $stock = Stock::create($validated);
+        // Crie a entrada de estoque associando ao user_id do usuário autenticado
+        $stock = Stock::create(array_merge($validated, ['user_id' => $user->id]));
 
         return response()->json([
             'id' => $stock->id,
-            'user' => $stock->user->name ?? 'Unknown',
+            'user' => $user->name,
             'product' => $stock->product->name ?? 'Unknown',
             'data' => $stock->data,
             'quantity' => $stock->quantity,
@@ -73,6 +76,7 @@ class StockController extends Controller
             'canceled' => $stock->canceled,
         ], 201);
     }
+
 
     /**
      * @OA\Get(
