@@ -42,6 +42,6 @@ class ProductSeeder extends Seeder
         foreach ($products as $product) {
             Product::create($product);
         }
-        Product::factory(10)->create();
+        Product::factory(15)->create();
     }
 }

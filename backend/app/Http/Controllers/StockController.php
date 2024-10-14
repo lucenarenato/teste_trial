@@ -9,8 +9,30 @@ use Carbon\Carbon;
 class StockController extends Controller
 {
     /**
-     * Lançamento de estoque (entrada/saída).
+     * @OA\Post(
+     *     path="/api/stock",
+     *     tags={"Stock"},
+     *     summary="Create Stock Entry",
+     *     description="Create a new stock entry for a product",
+     *     operationId="createStockEntry",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"user_id", "product_id", "data", "quantity", "type_id"},
+     *             @OA\Property(property="user_id", type="integer", example=1, description="ID of the user"),
+     *             @OA\Property(property="product_id", type="integer", example=10, description="ID of the product"),
+     *             @OA\Property(property="data", type="string", format="date", example="2024-10-11", description="Date of the stock entry"),
+     *             @OA\Property(property="quantity", type="integer", example=5, description="Quantity of the stock"),
+     *             @OA\Property(property="type_id", type="integer", example=1, description="Type of the stock entry: 1 for entry, 2 for exit"),
+     *             @OA\Property(property="canceled", type="boolean", example=false, description="Whether the stock entry is canceled")
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Stock entry created successfully"),
+     *     @OA\Response(response=400, description="Bad request"),
+     *     @OA\Response(response=404, description="Resource Not Found"),
+     * )
      */
+
     public function createStockEntry(Request $request)
     {
         $validated = $request->validate([
@@ -36,7 +58,44 @@ class StockController extends Controller
     }
 
     /**
-     * Consulta de estoque com filtros.
+     * @OA\Get(
+     *     path="/api/stock",
+     *     tags={"Stock"},
+     *     summary="Get filtered stock data",
+     *     description="Retrieve stock entries based on filters such as user, product, and period.",
+     *     operationId="getStockData",
+     *     @OA\Parameter(
+     *         name="user_id",
+     *         in="query",
+     *         required=false,
+     *         description="Filter by user ID",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Parameter(
+     *         name="product_id",
+     *         in="query",
+     *         required=false,
+     *         description="Filter by product ID",
+     *         @OA\Schema(type="integer", example=10)
+     *     ),
+     *     @OA\Parameter(
+     *         name="start_date",
+     *         in="query",
+     *         required=false,
+     *         description="Filter by start date (YYYY-MM-DD)",
+     *         @OA\Schema(type="string", format="date", example="2024-01-01")
+     *     ),
+     *     @OA\Parameter(
+     *         name="end_date",
+     *         in="query",
+     *         required=false,
+     *         description="Filter by end date (YYYY-MM-DD)",
+     *         @OA\Schema(type="string", format="date", example="2024-10-01")
+     *     ),
+     *     @OA\Response(response=200, description="Successfully retrieved stock data"),
+     *     @OA\Response(response=400, description="Bad request"),
+     *     @OA\Response(response=404, description="Resource Not Found"),
+     * )
      */
     public function getStockData(Request $request)
     {
@@ -62,8 +121,18 @@ class StockController extends Controller
     }
 
     /**
-     * Estatísticas de estoque (Tabelas/Gráficos).
+     * @OA\Get(
+     *     path="/api/stock/statistics",
+     *     tags={"Stock"},
+     *     summary="Get stock statistics",
+     *     description="Retrieve statistics for top 10 products with the most and least stock.",
+     *     operationId="getStockStatistics",
+     *     @OA\Response(response=200, description="Successfully retrieved stock statistics"),
+     *     @OA\Response(response=400, description="Bad request"),
+     *     @OA\Response(response=404, description="Resource Not Found"),
+     * )
      */
+
     public function getStockStatistics()
     {
         $topProductsWithMostStock = Stock::with('product')

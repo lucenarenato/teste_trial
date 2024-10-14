@@ -481,6 +481,161 @@
                     }
                 }
             }
+        },
+        "/api/stock": {
+            "get": {
+                "tags": [
+                    "Stock"
+                ],
+                "summary": "Get filtered stock data",
+                "description": "Retrieve stock entries based on filters such as user, product, and period.",
+                "operationId": "getStockData",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "Filter by user ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "product_id",
+                        "in": "query",
+                        "description": "Filter by product ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Filter by start date (YYYY-MM-DD)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-01-01"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "Filter by end date (YYYY-MM-DD)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-10-01"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved stock data"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Stock"
+                ],
+                "summary": "Create Stock Entry",
+                "description": "Create a new stock entry for a product",
+                "operationId": "createStockEntry",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "product_id",
+                                    "data",
+                                    "quantity",
+                                    "type_id"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "description": "ID of the user",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "product_id": {
+                                        "description": "ID of the product",
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "data": {
+                                        "description": "Date of the stock entry",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-10-11"
+                                    },
+                                    "quantity": {
+                                        "description": "Quantity of the stock",
+                                        "type": "integer",
+                                        "example": 5
+                                    },
+                                    "type_id": {
+                                        "description": "Type of the stock entry: 1 for entry, 2 for exit",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "canceled": {
+                                        "description": "Whether the stock entry is canceled",
+                                        "type": "boolean",
+                                        "example": false
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Stock entry created successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/stock/statistics": {
+            "get": {
+                "tags": [
+                    "Stock"
+                ],
+                "summary": "Get stock statistics",
+                "description": "Retrieve statistics for top 10 products with the most and least stock.",
+                "operationId": "getStockStatistics",
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved stock statistics"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -508,6 +663,10 @@
         {
             "name": "Products",
             "description": "Products"
+        },
+        {
+            "name": "Stock",
+            "description": "Stock"
         }
     ],
     "security": [
