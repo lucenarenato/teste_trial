@@ -5,9 +5,26 @@ namespace App\Http\Controllers;
 use App\Models\Stock;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class StockController extends Controller
 {
+    /**
+     * Authenticated User Instance.
+     *
+     * @var User
+     */
+    public User | null $user;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->user = Auth::guard('api')->user();
+    }
+
     /**
      * @OA\Post(
      *     path="/api/stock",
