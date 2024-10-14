@@ -33,16 +33,18 @@ class PopulateStockJob implements ShouldQueue
      */
     public function handle()
     {
-        $user = User::inRandomOrder()->first();
-        $product = Product::inRandomOrder()->first();
+        for ($i = 0; $i < 10; $i++) {
+            $user = User::inRandomOrder()->first();
+            $product = Product::inRandomOrder()->first();
 
-        Stock::create([
-            'user_id' => $user->id,
-            'product_id' => $product->id,
-            'data' => now(),
-            'quantity' => rand(1, 100),
-            'type_id' => rand(1, 2),
-            'canceled' => false,
-        ]);
+            Stock::create([
+                'user_id' => $user->id,
+                'product_id' => $product->id,
+                'data' => now(),
+                'quantity' => rand(1, 100),
+                'type_id' => rand(1, 2),
+                'canceled' => false,
+            ]);
+        }
     }
 }
