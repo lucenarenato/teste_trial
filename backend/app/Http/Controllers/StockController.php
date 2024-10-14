@@ -65,11 +65,12 @@ class StockController extends Controller
 
         // Crie a entrada de estoque associando ao user_id do usuário autenticado
         $stock = Stock::create(array_merge($validated, ['user_id' => $user->id]));
+        $stock->load('product');
 
         return response()->json([
             'id' => $stock->id,
             'user' => $user->name,
-            'product' => $stock->product->name ?? 'Unknown',
+            'product' => $stock->product->title ?? 'Unknown',
             'data' => $stock->data,
             'quantity' => $stock->quantity,
             'type' => $stock->type_id == 1 ? 'Entrada' : 'Saída',

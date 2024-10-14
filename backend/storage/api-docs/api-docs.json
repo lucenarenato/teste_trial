@@ -559,18 +559,12 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "user_id",
                                     "product_id",
                                     "data",
                                     "quantity",
                                     "type_id"
                                 ],
                                 "properties": {
-                                    "user_id": {
-                                        "description": "ID of the user",
-                                        "type": "integer",
-                                        "example": 1
-                                    },
                                     "product_id": {
                                         "description": "ID of the product",
                                         "type": "integer",
