@@ -2,7 +2,7 @@
 
 set -e
 
-role=${CONTAINER_ROLE:-php-fpm}
+role=${CONTAINER_ROLE:-laravel.test}
 env=${APP_ENV:-production}
 
 if [ "$env" != "local" ]; then
