@@ -12,6 +12,11 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        //
+        'api/*',
+        'sub.domain.zone' => [
+          'prefix/*'
+        ],
     ];
+    // Disabling CSRF protection for your API
+
 }
