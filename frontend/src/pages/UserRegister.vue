@@ -1,44 +1,53 @@
-<template>
-  <q-page class="flex flex-center">
-    <q-card>
-      <q-card-section>
-        <div class="text-h6">Registrar</div>
-      </q-card-section>
-
-      <q-card-section>
-        <q-input v-model="name" label="Nome" />
-        <q-input v-model="email" label="Email" type="email" />
-        <q-input v-model="password" label="Senha" type="password" />
-        <q-input
-          v-model="password_confirmation"
-          label="Confirme a Senha"
-          type="password"
-        />
-      </q-card-section>
-
-      <q-card-actions align="right">
-        <q-btn label="Registrar" color="primary" @click="handleRegister" />
-      </q-card-actions>
-    </q-card>
-  </q-page>
+<template lang="pug">
+q-page(class="flex flex-center")
+    -card
+      q-card-section
+        q-avatar(size="80px" class="absolute-center shadow-10" icon="person_add" color="primary" v-if="!registrationError")
+        q-avatar(size="80px" class="absolute-center shadow-10" icon="error" color="negative" v-if="registrationError")
+      q-card-section
+        div(class="text-center q-pt-md")
+          div(class="col text-h6 ellipsis" v-if="!registrationError") Register
+          div(class="col text-h6 ellipsis" v-if="registrationError") Registration Error
+      q-card-section
+        q-form(class="q-gutter-md" @submit="onSubmit")
+          q-input(lazy-rules v-model="form.name" label="Name")
+          q-input(lazy-rules v-model="form.email" label="Email")
+          q-input(lazy-rules v-model="form.password" type="password" label="Password")
+          q-card-actions(class="q-pa-none")
+            q-btn(unelevated color="primary" size="lg" class="full-width" label="Register" type="submit")
 </template>
 
-<script setup>
-import { ref } from 'vue';
-import { useAuthStore } from '../stores/authStore';
+  <script>
+  import { reactive, ref } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { authStore } from 'src/stores/auth'
 
-const name = ref('');
-const email = ref('');
-const password = ref('');
-const password_confirmation = ref('');
-const authStore = useAuthStore();
+  export default {
+    setup() {
+      const auth = authStore()
+      const router = useRouter()
+      const registrationError = ref(false)
+      const form = reactive({ name: '', email: '', password: '' })
 
-const handleRegister = () => {
-  authStore.register({
-    name: name.value,
-    email: email.value,
-    password: password.value,
-    password_confirmation: password_confirmation.value,
-  });
-};
-</script>
+      async function onSubmit() {
+        try {
+          const response = await auth.register(form)
+          if (response.status === 201) {
+            router.push('/login')
+          }
+        } catch (error) {
+          console.error(error)
+          registrationError.value = true
+        }
+      }
+
+      return { form, onSubmit, registrationError }
+    }
+  }
+  </script>
+
+  <style>
+  .q-card {
+    width: 360px;
+  }
+  </style>

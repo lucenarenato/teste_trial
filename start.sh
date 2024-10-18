@@ -11,10 +11,10 @@ NOW="$NOW_DATE"
 
 echo "==================================== Start $NOW  ===================================="
 
-docker-compose -f frontend/docker-compose.yml up -d
+docker-compose -f frontend/docker-compose.dev.yml up -d --build --force-recreate --no-dep
 
 cd backend/
-cp .env.example .env
+#cp .env.example .env
 composer install -o
 ./vendor/bin/sail up -d
 
