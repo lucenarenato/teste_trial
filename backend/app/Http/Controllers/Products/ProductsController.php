@@ -109,9 +109,7 @@ class ProductsController extends Controller
      *              @OA\Property(property="image", type="string", format="binary", example="image.jpg"),
      *              @OA\Property(property="barcode", type="string", example="123456789012"),
      *              @OA\Property(property="is_active", type="boolean", example=true),
-     *              @OA\Property(property="SKU", type="string", example="SKU12345"),
-     *              @OA\Property(property="published_at", type="string", format="date-time", example="2024-10-11T00:00:00Z"),
-     *              @OA\Property(property="user_id", type="integer", example=1),
+     *              @OA\Property(property="SKU", type="string", example="SKU12345")
      *          ),
      *      ),
      *      @OA\Response(response=200, description="New Product Created Successfully"),
@@ -182,9 +180,7 @@ class ProductsController extends Controller
      *              @OA\Property(property="image", type="string", format="binary", example="updated_image.jpg"),
      *              @OA\Property(property="barcode", type="string", example="987654321098"),
      *              @OA\Property(property="is_active", type="boolean", example=true),
-     *              @OA\Property(property="SKU", type="string", example="SKU54321"),
-     *              @OA\Property(property="published_at", type="string", format="date-time", example="2024-10-11T00:00:00Z"),
-     *              @OA\Property(property="user_id", type="integer", example=2),
+     *              @OA\Property(property="SKU", type="string", example="SKU54321")
      *          ),
      *      ),
      *     @OA\Response(response=200, description="Product Updated Successfully"),

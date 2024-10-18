@@ -20,9 +20,7 @@ class ProductRequest extends FormRequest
             'image' => 'nullable|image|mimes:png,jpg,jpeg,gif,webp|max:2048',
             'barcode' => 'nullable|string|max:255',
             'is_active' => 'boolean',
-            'SKU' => 'nullable|string|max:255|unique:products,SKU,' . $this->product,
-            'published_at' => 'nullable|date',
-            'user_id' => 'required|exists:users,id',
+            'SKU' => 'nullable|string|max:255|unique:products,SKU,' . $this->product
         ];
     }
 
@@ -52,10 +50,7 @@ class ProductRequest extends FormRequest
             'image.max' => 'Product image max 2MB is allowed',
             'barcode.max' => 'Barcode must not exceed 255 characters',
             'is_active.boolean' => 'The active status must be true or false',
-            'SKU.unique' => 'The SKU must be unique',
-            'published_at.date' => 'Please provide a valid date for published at',
-            'user_id.required' => 'User ID is required',
-            'user_id.exists' => 'The selected user does not exist',
+            'SKU.unique' => 'The SKU must be unique'
         ];
     }
 }

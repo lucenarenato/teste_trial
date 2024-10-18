@@ -315,27 +315,32 @@
 					"formdata": [
 						{
 							"key": "title",
-							"value": "Samsung",
+							"value": "Xiaomi",
 							"type": "text"
 						},
 						{
 							"key": "price",
-							"value": "200",
+							"value": "500",
 							"type": "text"
 						},
 						{
 							"key": "image",
 							"type": "file",
-							"src": "GO1U0cOXcAABtd-.jpeg"
+							"src": "pessoas/images (4).jpeg"
 						},
 						{
 							"key": "description",
-							"value": "Test Description",
+							"value": "telefone",
 							"type": "text"
 						},
 						{
-							"key": "user_id",
-							"value": "1",
+							"key": "barcode",
+							"value": "0101010101",
+							"type": "text"
+						},
+						{
+							"key": "SKU",
+							"value": "PHONE",
 							"type": "text"
 						}
 					]
@@ -355,11 +360,8 @@
 		},
 		{
 			"name": "Get stock",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [
 					{
 						"key": "Authorization",
@@ -371,12 +373,12 @@
 					"formdata": [
 						{
 							"key": "user_id",
-							"value": "1",
+							"value": "3",
 							"type": "text"
 						},
 						{
 							"key": "product_id",
-							"value": "10",
+							"value": "14",
 							"type": "text"
 						},
 						{
@@ -386,19 +388,20 @@
 						},
 						{
 							"key": "end_date",
-							"value": "2024-10-01",
+							"value": "2024-10-17",
 							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "{{api_base_url}}/api/stock",
+					"raw": "{{api_base_url}}/api/stock/filter",
 					"host": [
 						"{{api_base_url}}"
 					],
 					"path": [
 						"api",
-						"stock"
+						"stock",
+						"filter"
 					]
 				}
 			},

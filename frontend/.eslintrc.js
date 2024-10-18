@@ -10,6 +10,7 @@ module.exports = {
   parserOptions: {
     parser: require.resolve('@typescript-eslint/parser'),
     extraFileExtensions: ['.vue'],
+    ecmaVersion: 'latest',
   },
 
   env: {
@@ -38,6 +39,8 @@ module.exports = {
     // https://github.com/prettier/eslint-config-prettier#installation
     // usage with Prettier, provided by 'eslint-config-prettier'.
     'prettier',
+    'plugin:vue/vue3-recommended',
+    'eslint:recommended',
   ],
 
   plugins: [

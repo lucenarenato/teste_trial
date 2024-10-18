@@ -35,7 +35,12 @@ Route::group([
     /**
      * Products Module
      */
-    Route::resource('products', ProductsController::class);
+    Route::get('products', [ProductsController::class, 'index'])->name('products.index'); // Listar produtos
+    Route::get('products/{product}', [ProductsController::class, 'show'])->name('products.show'); // Mostrar produto específico
+    Route::post('products', [ProductsController::class, 'store'])->name('products.store'); // Criar novo produto
+    Route::put('products/{product}', [ProductsController::class, 'update'])->name('products.update'); // Atualizar produto
+    Route::patch('products/{product}', [ProductsController::class, 'update'])->name('products.update'); // Atualizar parcialmente produto
+    Route::delete('products/{product}', [ProductsController::class, 'destroy'])->name('products.destroy'); // Excluir produto
     Route::get('products/view/all', [ProductsController::class, 'indexAll']);
     Route::get('products/view/search', [ProductsController::class, 'search']);
 
@@ -43,7 +48,7 @@ Route::group([
      * Stocks Module
      */
     Route::post('/stock', [StockController::class, 'createStockEntry']);
-    Route::get('/stock', [StockController::class, 'getStockData']);
+    Route::post('/stock/filter', [StockController::class, 'getStockData']);
     Route::get('/stock/statistics', [StockController::class, 'getStockStatistics']);
 
 });

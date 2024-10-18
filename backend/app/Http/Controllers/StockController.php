@@ -80,8 +80,8 @@ class StockController extends Controller
 
 
     /**
-     * @OA\Get(
-     *     path="/api/stock",
+     * @OA\Post(
+     *     path="/api/stock/filter",
      *     tags={"Stock"},
      *     summary="Get filtered stock data",
      *     description="Retrieve stock entries based on filters such as user, product, and period.",
@@ -119,27 +119,39 @@ class StockController extends Controller
      *     @OA\Response(response=404, description="Resource Not Found"),
      * )
      */
-    public function getStockData(Request $request)
+
+     public function getStockData(Request $request)
     {
         $query = Stock::query();
 
-        if ($request->filled('user_id')) {
-            $query->where('user_id', $request->user_id);
+        if ($request->has('user_id')) {
+            $query->where('user_id', $request->input('user_id'));
         }
 
-        if ($request->filled('product_id')) {
-            $query->where('product_id', $request->product_id);
+        if ($request->has('product_id')) {
+            $query->where('product_id', $request->input('product_id'));
         }
 
-        if ($request->filled('start_date') && $request->filled('end_date')) {
-            $startDate = Carbon::parse($request->start_date);
-            $endDate = Carbon::parse($request->end_date);
+        if ($request->has('start_date') && $request->has('end_date')) {
+            $startDate = Carbon::parse($request->input('start_date'));
+            $endDate = Carbon::parse($request->input('end_date'));
             $query->whereBetween('data', [$startDate, $endDate]);
         }
 
         $stockData = $query->get();
 
-        return response()->json($stockData);
+        $totalItems = $stockData->count();
+
+        $meta = [
+            'total' => $totalItems,
+            'current_page' => 1,
+            'last_page' => 1,
+        ];
+
+        return response()->json([
+            'data' => $stockData,
+            'meta' => $meta,
+        ]);
     }
 
     /**

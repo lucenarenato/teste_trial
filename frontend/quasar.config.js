@@ -11,9 +11,18 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const { configure } = require('quasar/wrappers');
+const path = require('path');
 
 module.exports = configure(function (ctx) {
   return {
+    eslint: {
+      // fix: true,
+      // include: [],
+      // exclude: [],
+      // rawOptions: {},
+      warnings: true,
+      errors: true,
+    },
     // https://v2.quasar.dev/quasar-cli-webpack/supporting-ts
     supportTS: {
       tsCheckerConfig: {
@@ -30,10 +39,10 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-webpack/boot-files
-    boot: ['i18n', 'axios'],
+    boot: ['i18n', 'axios', 'initialize'],
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-css
-    css: ['app.scss'],
+    css: ['web.css'], //'app.scss'
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
@@ -51,7 +60,12 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-build
     build: {
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      env: require('dotenv').config().parsed,
+      target: {
+        browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
+        node: 'node20',
+      },
+      vueRouterMode: 'history', // available values: 'hash', 'history'
 
       // transpile: false,
       // publicPath: '/',
@@ -99,7 +113,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: [],
+      plugins: ['LocalStorage'],
     },
 
     // animations: 'all', // --- includes all animations
@@ -109,21 +123,11 @@ module.exports = configure(function (ctx) {
     // https://v2.quasar.dev/quasar-cli-webpack/developing-ssr/configuring-ssr
     ssr: {
       pwa: false,
-
-      // manualStoreHydration: true,
-      // manualPostHydrationTrigger: true,
-
-      prodPort: 3000, // The default port that the production server should use
-      // (gets superseded if process.env.PORT is specified at runtime)
-
+      prodPort: 3000,
       maxAge: 1000 * 60 * 60 * 24 * 30,
-      // Tell browser when a file from the server should expire from cache (in ms)
-
-      // chainWebpackWebserver (/* chain */) {},
-
       middlewares: [
         ctx.prod ? 'compression' : '',
-        'render', // keep this as last one
+        'render', // mantenha 'render' como o último
       ],
     },
 
@@ -131,6 +135,10 @@ module.exports = configure(function (ctx) {
     pwa: {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
+      injectPwaMetaTags: true,
+      swFilename: 'sw.js',
+      manifestFilename: 'manifest.json',
+      useCredentialsForManifestTag: false,
 
       // for the custom service worker ONLY (/src-pwa/custom-service-worker.[js|ts])
       // if using workbox in InjectManifest mode
@@ -203,6 +211,14 @@ module.exports = configure(function (ctx) {
         // https://www.electron.build/configuration/configuration
 
         appId: 'quasar-project',
+      },
+
+      // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-browser-extensions/configuring-bex
+      bex: {
+        contentScripts: ['my-content-script'],
+
+        // extendBexScriptsConf (esbuildConf) {}
+        // extendBexManifestJson (json) {}
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
