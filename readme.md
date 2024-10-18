@@ -13,6 +13,13 @@
 - Back end(Laravel)
 - Front end(Vue.js)
 
+![postman](backend/rest.png)
+
+![Primeira](frontend/Screenshot_2024-10-14_232916.png)
+![login](frontend/login.png)
+![me](frontend/me.png)
+![Grafico](frontend/graficos.png)
+
 ## Como iniciar o projeto
 
 ```sh
